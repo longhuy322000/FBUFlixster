@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvReviewTitle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:gravity="center_horizontal"
+    tools:context=".MovieDetailsActivity">
+
+    <fragment
+        android:id="@+id/player"
+        android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--    <com.google.android.youtube.player.YouTubePlayerView-->
+    <!--        android:id="@+id/player"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"/>-->
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivBackdrop"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
+        tools:text="Fast and Furious: Hobbs and Shawn" />
+
+    <RatingBar
+        android:id="@+id/rbVoteAverage"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTitle"
+        android:layout_centerHorizontal="true"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:theme="@style/RatingBar" />
+
+    <TextView
+        android:id="@+id/tvOverview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rbVoteAverage"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="#FFFFFF"
+        tools:text="Textview Overview" />
+
+    <ImageView
+        android:id="@+id/ivBackdrop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/player"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOverview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="Reviews"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+</RelativeLayout>
