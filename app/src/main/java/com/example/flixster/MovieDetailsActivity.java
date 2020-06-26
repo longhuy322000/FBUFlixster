@@ -42,8 +42,6 @@ import okhttp3.Headers;
 
 public class MovieDetailsActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener {
 
-    public static final String VIDEO_URL = "https://api.themoviedb.org/3/movie/%s/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-    public static final String REVIEW_URL = "https://api.themoviedb.org/3/movie/%s/reviews?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
     public final int RADIUS = 30; // corner radius for image
     public static final String TAG = "MovieDetailsActivity";
 
@@ -55,6 +53,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements YouTubePl
     YouTubePlayerFragment playerView;
     YouTubePlayer youTubePlayer;
     RecyclerView rvReview;
+    TextView tvReviewTitle;
+    TextView tvReleaseDate;
+
     String videoId;
     List<Review> reviews;
 
@@ -73,6 +74,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements YouTubePl
         rbVoteAverage = binding.rbVoteAverage;
         ivBackdrop = binding.ivBackdrop;
         rvReview = binding.rvReview;
+        tvReviewTitle = binding.tvReviewTitle;
+        tvReleaseDate = binding.tvReleaseDate;
 
         // set up playerView for Youtube Player Fragment
         playerView = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.player);
@@ -85,6 +88,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements YouTubePl
         // set data
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
+        tvReleaseDate.setText(movie.getReleaseDate());
 
         // vote average is 1..10, convert to 0.5 by dividing by 2
         float voteAverage = movie.getVoteAverage().floatValue();
@@ -116,10 +120,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements YouTubePl
     }
 
     private void getVideoKey() {
-        String youtubeUrl = String.format(VIDEO_URL, movie.getId());
-        Log.i(TAG, "youtube urf " + youtubeUrl);
+        String TRAILER_URL = getString(R.string.TRAILER_URL) + getString(R.string.moviedb_api_key);
+        TRAILER_URL = String.format(TRAILER_URL, movie.getId());
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get(youtubeUrl, new JsonHttpResponseHandler() {
+        client.get(TRAILER_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "getVideoKey onSuccess");
@@ -159,6 +163,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements YouTubePl
     }
 
     private void getReviews(final ReviewAdapter reviewAdapter) {
+        String REVIEW_URL = getString(R.string.REVIEW_URL) + getString(R.string.moviedb_api_key);
+        REVIEW_URL = String.format(REVIEW_URL, movie.getId());
         AsyncHttpClient client = new AsyncHttpClient();
         String reviewUrl = String.format(REVIEW_URL, movie.getId());
         client.get(reviewUrl, new JsonHttpResponseHandler() {
@@ -170,7 +176,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements YouTubePl
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "review results: " + results.toString());
                     reviews.addAll(Review.fromJSONArray(results));
-                    reviewAdapter.notifyDataSetChanged();
+                    if (reviews.size() == 0) {
+                        tvReviewTitle.setText("No reviews");
+                    }
+                    else {
+                        reviewAdapter.notifyDataSetChanged();
+                    }
                 } catch (JSONException e) {
                     Log.e(TAG, "getReview hit json exception", e);
                 }

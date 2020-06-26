@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Parcel
@@ -19,6 +20,8 @@ public class Movie {
     String title;
     String overview;
     Double voteAverage;
+    Double popularity;
+    String releaseDate;
 
     public Movie() {}
 
@@ -29,6 +32,8 @@ public class Movie {
         title = jsonObject.getString("title");
         overview = jsonObject.getString("overview");
         voteAverage = jsonObject.getDouble("vote_average");
+        popularity = jsonObject.getDouble("popularity");
+        releaseDate = jsonObject.getString("release_date");
     }
 
     public static List<Movie> fromJsonArray(JSONArray movieJsonArray) throws JSONException {
@@ -61,5 +66,41 @@ public class Movie {
 
     public Double getVoteAverage() {
         return voteAverage;
+    }
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public static class MovieVoteRatingComparator implements Comparator<Movie> {
+        public int compare(Movie a, Movie b) {
+            if (a.getVoteAverage() >= b.getVoteAverage()){
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        }
+    }
+
+    public static class MoviePopularityComparator implements Comparator<Movie> {
+        public int compare(Movie a, Movie b) {
+            if (a.getPopularity() >= b.getPopularity()){
+                return -1;
+            }
+            else {
+                return 1;
+            }
+        }
+    }
+
+    public static class MovieReleaseDateComparator implements Comparator<Movie> {
+        public int compare(Movie a, Movie b) {
+            return a.getReleaseDate().compareTo(b.getReleaseDate()) * (-1);
+        }
     }
 }

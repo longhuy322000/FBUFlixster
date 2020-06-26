@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioGroup;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -19,31 +20,49 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import okhttp3.Headers;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String NOW_PLAYING_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-    public static String CONFIG_URL = "https://api.themoviedb.org/3/configuration?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
     public static final String TAG = "MainActivity";
 
+    MovieAdapter movieAdapter;
     List<Movie> movies;
+    RadioGroup rgSortBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
+        rgSortBy = binding.rgSortBy;
+        rgSortBy.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (radioGroup.getCheckedRadioButtonId() == R.id.rbPopularity) {
+                    Collections.sort(movies, new Movie.MoviePopularityComparator());
+                }
+                else if (radioGroup.getCheckedRadioButtonId() == R.id.rbVoteAverage) {
+                    Collections.sort(movies, new Movie.MovieVoteRatingComparator());
+                }
+                else if (radioGroup.getCheckedRadioButtonId() == R.id.rbReleaseDate) {
+                    Collections.sort(movies, new Movie.MovieReleaseDateComparator());
+                }
+                movieAdapter.notifyDataSetChanged();
+            }
+        });
         RecyclerView rvMovies = binding.rvMovies;
         movies = new ArrayList<>();
 
         // Create the adapter
-        final MovieAdapter movieAdapter = new MovieAdapter(this, movies);
+        movieAdapter = new MovieAdapter(this, movies);
 
         // Set the adapter on the recycler view
         rvMovies.setAdapter(movieAdapter);
@@ -51,11 +70,12 @@ public class MainActivity extends AppCompatActivity {
         // Set a Layout Manager on the recycler view
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
-        getPostSize(movieAdapter);
+        getPictureSizes(movieAdapter);
         getMovies(movieAdapter);
     }
 
     private void getMovies(final MovieAdapter movieAdapter) {
+        final String NOW_PLAYING_URL = getString(R.string.NOW_PLAYING_API) + getString(R.string.moviedb_api_key);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(NOW_PLAYING_URL, new JsonHttpResponseHandler() {
             @Override
@@ -66,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results: " + results.toString());
                     movies.addAll(Movie.fromJsonArray(results));
+                    Collections.sort(movies, new Movie.MoviePopularityComparator());
                     movieAdapter.notifyDataSetChanged();
                     Log.i(TAG, "Movies: " + movies.size());
                 } catch (JSONException e) {
@@ -79,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getPostSize(final MovieAdapter movieAdapter) {
+    private void getPictureSizes(final MovieAdapter movieAdapter) {
+        final String CONFIG_URL = getString(R.string.CONFIG_API) + getString(R.string.moviedb_api_key);
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(CONFIG_URL, new JsonHttpResponseHandler() {
             @Override
@@ -103,4 +125,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

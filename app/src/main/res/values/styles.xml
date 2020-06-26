@@ -12,4 +12,8 @@
         <item name="colorControlActivated">@color/yellow</item>
     </style>
 
+    <style name="RadioButton" parent="AppTheme">
+        <item name="colorControlNormal">@color/lightGrey</item>
+    </style>
+
 </resources>

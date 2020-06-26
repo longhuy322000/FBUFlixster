@@ -11,7 +11,7 @@
     <fragment
         android:id="@+id/player"
         android:name="com.google.android.youtube.player.YouTubePlayerFragment"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content" />
 
     <!--    <com.google.android.youtube.player.YouTubePlayerView-->
@@ -24,9 +24,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivBackdrop"
-        android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/player"
         android:fontFamily="@font/alfa_slab_one"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -39,8 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
-        android:layout_centerHorizontal="false"
-        android:layout_marginLeft="8dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/player"
         android:numStars="5"
         android:stepSize="0.5"
         android:theme="@style/RatingBar" />
@@ -50,9 +52,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rbVoteAverage"
-        android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/player"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textColor="#FFFFFF"
@@ -62,9 +64,9 @@
         android:id="@+id/ivBackdrop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/player"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/player"
         tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -82,21 +84,20 @@
         android:id="@+id/tvReviewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvOverview"
+        android:layout_below="@+id/player"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="0dp"
         android:fontFamily="@font/alfa_slab_one"
         android:text="Reviews"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
-        android:layout_alignParentEnd="false"
-        android:layout_marginStart="25dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/rbVoteAverage"
         android:text="Release Date: "
@@ -108,10 +109,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTitle"
-        android:layout_marginStart="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/textView2"
-        android:inputType="date"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/textView3"
         android:textColor="#FFFFFF"
         tools:text="2020-20-20" />
+
 </RelativeLayout>
